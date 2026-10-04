@@ -139,8 +139,8 @@ Basic things I want to get right. I'll tick them only when they are really done.
 
 **Phase 1: core backend**
 
-- [ ] NestJS project setup
-- [ ] Docker Compose with PostgreSQL
+- [x] NestJS project setup
+- [x] Docker Compose with PostgreSQL
 - [ ] Database migrations
 - [ ] Authentication and roles
 - [ ] Events and seats
@@ -149,7 +149,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 
 **Phase 2: shipping it**
 
-- [ ] React frontend (login, event list, seat selection, my reservations)
+- [] React frontend (login, event list, seat selection, my reservations)
 - [ ] GitHub Actions
 - [ ] Docker production image
 - [ ] AWS deployment, HTTPS and health checks
