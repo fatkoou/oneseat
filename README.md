@@ -6,7 +6,8 @@ The question behind it is simple: what happens when two people try to book the s
 
 A basic "check if the seat is free, then book it" flow doesn't work here. Both requests can see the seat as free before either of them saves a reservation. This project is mostly about solving that problem properly, instead of building another CRUD app.
 
-**Status:** early development. Nothing is finished yet, and I'll update this README as I implement things.
+**Status:** Phase 1 (backend foundation). The NestJS app connects to PostgreSQL running in Docker, and migrations work with a first `users` table. Authentication is next. I'll update this README as I go.
+
 
 ## What it will do
 
@@ -141,7 +142,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 
 - [x] NestJS project setup
 - [x] Docker Compose with PostgreSQL
-- [ ] Database migrations
+- [x] Database migrations
 - [ ] Authentication and roles
 - [ ] Events and seats
 - [ ] Reservations without double booking
@@ -149,7 +150,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 
 **Phase 2: shipping it**
 
-- [] React frontend (login, event list, seat selection, my reservations)
+- [ ] React frontend (login, event list, seat selection, my reservations)
 - [ ] GitHub Actions
 - [ ] Docker production image
 - [ ] AWS deployment, HTTPS and health checks
