@@ -1,13 +1,12 @@
 # OneSeat
 
-OneSeat is a small event booking app I'm building to practice backend development. The name comes from the one rule the whole project is built around: one seat, one person.
+OneSeat is an event seat reservation backend. The name is the one rule the whole project is built around: one seat, one person.
 
 The question behind it is simple: what happens when two people try to book the same seat at the same time?
 
 A basic "check if the seat is free, then book it" flow doesn't work here. Both requests can see the seat as free before either of them saves a reservation. This project is mostly about solving that problem properly, instead of building another CRUD app.
 
 **Status:** Phase 1 (backend foundation). The NestJS app connects to PostgreSQL running in Docker, and migrations work with a first `users` table. Authentication is next. I'll update this README as I go.
-
 
 ## What it will do
 
@@ -21,13 +20,19 @@ A basic "check if the seat is free, then book it" flow doesn't work here. Both r
 
 ## Tech stack
 
+**In use**
+
 - **Backend:** NestJS, TypeScript
-- **Database:** PostgreSQL
+- **Database:** PostgreSQL, TypeORM
+- **Containers:** Docker, Docker Compose
+
+**Planned**
+
 - **Cache / temporary data:** Redis
 - **Background jobs:** BullMQ
 - **Frontend:** React, TypeScript
-- **Testing:** Jest, Supertest
-- **Containers:** Docker, Docker Compose
+- **API docs:** Swagger / OpenAPI
+- **Testing:** Jest and Supertest come with the NestJS template, but I haven't written real tests yet
 - **CI:** GitHub Actions
 - **Cloud:** AWS
 - **Infrastructure:** Terraform
@@ -45,6 +50,8 @@ flowchart LR
     Queue --> Worker[Background worker]
     Worker --> DB
 ```
+
+Right now only the API and PostgreSQL exist. The rest is planned.
 
 The API and the worker can run as separate processes, but they live in the same codebase.
 
@@ -77,11 +84,11 @@ sequenceDiagram
     API-->>B: Seat unavailable
 ```
 
-My plan is to use PostgreSQL transactions and a unique constraint on the event and seat, instead of relying on Redis for the final check. PostgreSQL is the source of truth for reservations. If cancelled reservations stay in the table, the constraint will only apply to the active ones, so a cancelled seat can be reserved again.
+My plan is to use PostgreSQL transactions and a unique index on the event and seat, instead of relying on Redis for the final check. PostgreSQL is the source of truth for reservations. If cancelled reservations stay in the table, the index will only cover the active ones (a partial unique index), so a cancelled seat can be reserved again.
 
 ## Redis and BullMQ
 
-Redis will be used for temporary seat holds and as the backend for BullMQ.
+Redis will be used for temporary seat holds and as the backend for BullMQ. This is planned for Phase 3.
 
 For example, when a reservation has a time limit, a background job can release the seat after it expires. Jobs should also be safe to run twice. If the same job is retried, it must not leave the data in a wrong state.
 
@@ -93,37 +100,56 @@ I'll also write the usual unit and integration tests around the reservation flow
 
 ## Project structure
 
-This is the plan for now, and it will probably change as the project grows.
+What exists today, inside `backend/`:
 
 ```
-src/
-├── auth/
-├── users/
-├── events/
-├── seats/
-├── reservations/
-├── notifications/
-├── common/
+backend/src/
+├── config/          # environment helpers
+├── database/        # database config
+├── migrations/      # TypeORM migrations
+├── users/           # user entity
+├── app.module.ts
+├── data-source.ts   # data source for the TypeORM CLI
 └── main.ts
 ```
 
+Planned modules: `auth`, `events`, `seats`, `reservations` and `notifications`. The structure will probably change as the project grows.
+
 ## Running it locally
 
-The local setup is meant to run with Docker Compose. It doesn't work yet, because the project is just starting.
+You need Docker, Docker Compose and Node.js (I'm using Node 24). For now only PostgreSQL runs in Docker, and the API runs directly on your machine.
 
 ```bash
 git clone https://github.com/fatkoou/oneseat.git
 cd oneseat
 cp .env.example .env
-docker compose up --build
+docker compose up -d
+cd backend
+npm install
+npm run migration:run
+npm run start:dev
 ```
 
-Planned local ports:
+Set your own password in `.env` before starting the database.
 
-- Frontend: `localhost:5173`
+Then open `http://localhost:3000`. For now it only returns "Hello World!", the real endpoints come later.
+
+Local ports:
+
 - API: `localhost:3000`
 - PostgreSQL: `localhost:5432`
-- Redis: `localhost:6379`
+
+## Environment variables
+
+Copy `.env.example` to `.env` in the repo root. The real `.env` is never committed.
+
+| Variable | Description |
+| --- | --- |
+| `POSTGRES_USER` | Database user |
+| `POSTGRES_PASSWORD` | Database password |
+| `POSTGRES_DB` | Database name |
+| `DB_HOST` | Database host (`localhost` when running locally) |
+| `DB_PORT` | Database port (`5432`) |
 
 ## Security checklist
 
@@ -151,6 +177,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 **Phase 2: shipping it**
 
 - [ ] React frontend (login, event list, seat selection, my reservations)
+- [ ] Swagger / OpenAPI docs
 - [ ] GitHub Actions
 - [ ] Docker production image
 - [ ] AWS deployment, HTTPS and health checks
