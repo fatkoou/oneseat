@@ -6,7 +6,7 @@ The question behind it is simple: what happens when two people try to book the s
 
 A basic "check if the seat is free, then book it" flow doesn't work here. Both requests can see the seat as free before either of them saves a reservation. This project is mostly about solving that problem properly, instead of building another CRUD app.
 
-**Status:** Phase 1 (backend foundation). The NestJS app connects to PostgreSQL running in Docker, and migrations work with a first `users` table. Authentication is next. I'll update this README as I go.
+**Status:** Phase 1 (backend foundation). The NestJS app connects to PostgreSQL running in Docker, migrations work, and users can register and log in with JWT. Roles are checked with guards. Events and seats are next. I'll update this README as I go.
 
 ## What it will do
 
@@ -24,6 +24,7 @@ A basic "check if the seat is free, then book it" flow doesn't work here. Both r
 
 - **Backend:** NestJS, TypeScript
 - **Database:** PostgreSQL, TypeORM
+- **Auth and validation:** JWT (`@nestjs/jwt`), argon2, class-validator
 - **Containers:** Docker, Docker Compose
 
 **Planned**
@@ -104,16 +105,17 @@ What exists today, inside `backend/`:
 
 ```
 backend/src/
+├── auth/            # register, login, JWT and role guards
 ├── config/          # environment helpers
 ├── database/        # database config
 ├── migrations/      # TypeORM migrations
-├── users/           # user entity
+├── users/           # user entity and users service
 ├── app.module.ts
 ├── data-source.ts   # data source for the TypeORM CLI
 └── main.ts
 ```
 
-Planned modules: `auth`, `events`, `seats`, `reservations` and `notifications`. The structure will probably change as the project grows.
+Planned modules: `events`, `seats`, `reservations` and `notifications`. The structure will probably change as the project grows.
 
 ## Running it locally
 
@@ -130,9 +132,9 @@ npm run migration:run
 npm run start:dev
 ```
 
-Set your own password in `.env` before starting the database.
+Set your own database password and a long random `JWT_SECRET` in `.env` before starting.
 
-Then open `http://localhost:3000`. For now it only returns "Hello World!", the real endpoints come later.
+Then open `http://localhost:3000`. The root route still returns the "Hello World!" from the NestJS template. The real endpoints are listed in the API section below.
 
 Local ports:
 
@@ -150,16 +152,25 @@ Copy `.env.example` to `.env` in the repo root. The real `.env` is never committ
 | `POSTGRES_DB` | Database name |
 | `DB_HOST` | Database host (`localhost` when running locally) |
 | `DB_PORT` | Database port (`5432`) |
+| `JWT_SECRET` | Secret used to sign tokens. Generate one with `openssl rand -base64 48` |
+
+## API
+
+| Method | Route | Auth | Description |
+| --- | --- | --- | --- |
+| `POST` | `/auth/register` | none | Create an account |
+| `POST` | `/auth/login` | none | Log in and get an access token (valid for 15 minutes) |
+| `GET` | `/auth/me` | Bearer token | Return the current user from the token |
 
 ## Security checklist
 
 Basic things I want to get right. I'll tick them only when they are really done.
 
-- [ ] Hash passwords (bcrypt or argon2)
+- [x] Hash passwords with argon2
 - [ ] Validate all incoming data
 - [ ] Rate limit the login endpoint
 - [ ] Users can only access their own reservations
-- [ ] Keep secrets in environment variables, never in the code
+- [x] Keep secrets in environment variables, never in the code
 - [ ] Set up CORS and security headers properly
 
 ## Roadmap
@@ -169,7 +180,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 - [x] NestJS project setup
 - [x] Docker Compose with PostgreSQL
 - [x] Database migrations
-- [ ] Authentication and roles
+- [x] Authentication and roles
 - [ ] Events and seats
 - [ ] Reservations without double booking
 - [ ] Concurrent reservation test
