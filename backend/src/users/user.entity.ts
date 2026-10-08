@@ -5,6 +5,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+export type UserRole = 'admin' | 'user';
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -17,7 +19,7 @@ export class User {
   passwordHash!: string;
 
   @Column({ type: 'varchar', default: 'user' })
-  role!: 'admin' | 'user';
+  role!: UserRole;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
