@@ -19,5 +19,6 @@ const ACCESS_TOKEN_TTL_SECONDS = 15 * 60;
   ],
   providers: [AuthService],
   controllers: [AuthController],
+  exports: [JwtModule],
 })
 export class AuthModule {}

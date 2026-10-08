@@ -1,9 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryFailedError, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from './user.entity';
-
-const PG_UNIQUE_VIOLATION = '23505';
+import { isUniqueViolation } from '../common/database-errors';
 
 @Injectable()
 export class UsersService {
@@ -37,11 +36,4 @@ export class UsersService {
   private normalizeEmail(email: string): string {
     return email.trim().toLowerCase();
   }
-}
-
-function isUniqueViolation(error: unknown): boolean {
-  return (
-    error instanceof QueryFailedError &&
-    (error.driverError as { code?: string }).code === PG_UNIQUE_VIOLATION
-  );
 }
