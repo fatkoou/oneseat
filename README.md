@@ -255,6 +255,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 - [x] Users can only access their own reservations
 - [x] Keep secrets in environment variables, never in the code
 - [ ] Set up CORS and security headers properly
+- [x] Check production dependencies for known vulnerabilities in CI (npm audit)
 
 ## Roadmap
 
