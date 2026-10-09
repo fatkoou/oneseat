@@ -6,17 +6,23 @@ The question behind it is simple: what happens when two people try to book the s
 
 A basic "check if the seat is free, then book it" flow doesn't work here. Both requests can see the seat as free before either of them saves a reservation. This project is mostly about solving that problem properly, instead of building another CRUD app.
 
-**Status:** Phase 1 (backend foundation). The NestJS app connects to PostgreSQL running in Docker, migrations work, and users can register and log in with JWT. Roles are checked with guards. Events and seats are next. I'll update this README as I go.
+**Status:** The core backend works: users can register and log in, admins create events and generate seats from a layout, and users can reserve and cancel seats. A test sends 50 concurrent requests for the same seat and exactly one succeeds. Unit tests, API docs, a frontend and deployment are still ahead. I'll update this README as I go.
 
-## What it will do
+## What it does
 
-- Register and log in, with admin and user roles
-- Admins create events and seats
-- Users browse events and choose a seat
-- Users reserve seats, see their reservations and cancel them
-- Seats are held for a short time while someone is reserving
-- Confirmation emails are sent in the background
+**Working now**
+
+- Register and log in with JWT, with admin and user roles
+- Admins create events and generate seats from a layout (sections, rows, seat counts) instead of adding them one by one
+- Users reserve a seat, list their reservations and cancel them
+- A seat can have only one confirmed reservation, enforced by PostgreSQL
+
+**Planned**
+
+- Seats held for a short time while someone is reserving
+- Confirmation emails in the background
 - API documentation with Swagger
+- A React frontend
 
 ## Tech stack
 
@@ -25,6 +31,7 @@ A basic "check if the seat is free, then book it" flow doesn't work here. Both r
 - **Backend:** NestJS, TypeScript
 - **Database:** PostgreSQL, TypeORM
 - **Auth and validation:** JWT (`@nestjs/jwt`), argon2, class-validator
+- **Testing:** Jest, Supertest
 - **Containers:** Docker, Docker Compose
 
 **Planned**
@@ -33,7 +40,6 @@ A basic "check if the seat is free, then book it" flow doesn't work here. Both r
 - **Background jobs:** BullMQ
 - **Frontend:** React, TypeScript
 - **API docs:** Swagger / OpenAPI
-- **Testing:** Jest and Supertest come with the NestJS template, but I haven't written real tests yet
 - **CI:** GitHub Actions
 - **Cloud:** AWS
 - **Infrastructure:** Terraform
@@ -77,15 +83,53 @@ sequenceDiagram
     participant DB as PostgreSQL
     A->>API: Reserve A12
     B->>API: Reserve A12
-    API->>DB: Transaction (User A)
-    API->>DB: Transaction (User B)
+    API->>DB: Insert reservation (User A)
+    API->>DB: Insert reservation (User B)
     DB-->>API: One succeeds
     DB-->>API: One conflicts
     API-->>A: Reservation confirmed
     API-->>B: Seat unavailable
 ```
 
-My plan is to use PostgreSQL transactions and a unique index on the event and seat, instead of relying on Redis for the final check. PostgreSQL is the source of truth for reservations. If cancelled reservations stay in the table, the index will only cover the active ones (a partial unique index), so a cancelled seat can be reserved again.
+This is how it works now. The `reservations` table has a partial unique index on the seat, and it only covers confirmed reservations:
+
+```sql
+CREATE UNIQUE INDEX "UQ_reservations_active_seat"
+ON reservations (seat_id)
+WHERE status = 'confirmed';
+```
+
+The API doesn't check if the seat is free first. It just inserts. If PostgreSQL rejects the insert because of the index, the API returns `409 Conflict`. Cancelling a reservation only changes its status to `cancelled`, so the row stays in the table but the seat can be reserved again.
+
+PostgreSQL is the source of truth for reservations. Redis is not part of this check.
+
+## Seat layouts
+
+Admins don't create seats one by one. They describe the layout of the room and the API generates the seats:
+
+```
+POST /events/{eventId}/seats/generate
+```
+
+```json
+{
+  "sections": [
+    {
+      "name": "VIP",
+      "rows": [
+        { "label": "A", "seatCount": 8, "startNumber": 1 },
+        { "label": "B", "seatCount": 8, "startNumber": 1 }
+      ]
+    },
+    {
+      "name": "GENERAL",
+      "rows": [{ "label": "C", "seatCount": 20, "startNumber": 1 }]
+    }
+  ]
+}
+```
+
+The request is validated and limited (at most 5000 seats per request). The seats are created with one bulk insert. A seat is identified by event, section, row and number, and a unique constraint rejects duplicates with a `409`.
 
 ## Redis and BullMQ
 
@@ -95,27 +139,36 @@ For example, when a reservation has a time limit, a background job can release t
 
 ## Testing
 
-I don't want the concurrency part to work only in theory, so one of the tests will send many requests for the same seat at the same time. Something like 50 requests for the same event and seat, and the database should end up with exactly one valid reservation. The exact numbers don't matter, the result does.
+The concurrency test is the one I care about most. It starts the app against a separate test database, creates one seat and 50 users, and sends 50 reservation requests for that seat at the same time. It checks that exactly one request gets `201`, the other 49 get `409`, and the database holds exactly one confirmed reservation.
 
-I'll also write the usual unit and integration tests around the reservation flow.
+To make sure the test really tests something, I dropped the partial unique index in the test database and ran it again. All 50 requests succeeded and the test failed. So the protection comes from the database, not from the application code.
+
+One honest note: the requests are sent together, but the connection pool limits how many of them reach PostgreSQL at the same moment. So this tests concurrent requests, not 50 simultaneous writes.
+
+I don't have unit tests yet.
 
 ## Project structure
 
-What exists today, inside `backend/`:
-
 ```
-backend/src/
-├── auth/            # register, login, JWT and role guards
-├── config/          # environment helpers
-├── database/        # database config
-├── migrations/      # TypeORM migrations
-├── users/           # user entity and users service
-├── app.module.ts
-├── data-source.ts   # data source for the TypeORM CLI
-└── main.ts
+backend/
+├── src/
+│   ├── auth/            # register, login, JWT and role guards
+│   ├── common/          # shared helpers (database errors)
+│   ├── config/          # environment helpers
+│   ├── database/        # database config
+│   ├── events/          # events
+│   ├── migrations/      # TypeORM migrations
+│   ├── reservations/    # reserve, list and cancel
+│   ├── seats/           # seat layout generation
+│   ├── users/           # user entity and users service
+│   ├── app.module.ts
+│   ├── app.setup.ts     # shared app config (validation)
+│   ├── data-source.ts   # data source for the TypeORM CLI
+│   └── main.ts
+└── test/                # e2e tests
 ```
 
-Planned modules: `events`, `seats`, `reservations` and `notifications`. The structure will probably change as the project grows.
+Planned module: `notifications`. The structure will probably change as the project grows.
 
 ## Running it locally
 
@@ -141,6 +194,17 @@ Local ports:
 - API: `localhost:3000`
 - PostgreSQL: `localhost:5432`
 
+### Running the tests
+
+The tests use a separate database called `oneseat_test`. They empty its tables, so they refuse to run against any other database.
+
+```bash
+docker compose exec db psql -U oneseat -d oneseat -c "create database oneseat_test;"
+cd backend
+npm run migration:run:test
+npm run test:e2e
+```
+
 ## Environment variables
 
 Copy `.env.example` to `.env` in the repo root. The real `.env` is never committed.
@@ -161,15 +225,25 @@ Copy `.env.example` to `.env` in the repo root. The real `.env` is never committ
 | `POST` | `/auth/register` | none | Create an account |
 | `POST` | `/auth/login` | none | Log in and get an access token (valid for 15 minutes) |
 | `GET` | `/auth/me` | Bearer token | Return the current user from the token |
+| `GET` | `/events` | none | List events |
+| `GET` | `/events/:id` | none | Get one event |
+| `POST` | `/events` | Admin | Create an event |
+| `GET` | `/events/:eventId/seats` | none | List the seats of an event |
+| `POST` | `/events/:eventId/seats/generate` | Admin | Generate seats from a layout |
+| `POST` | `/reservations` | Bearer token | Reserve a seat |
+| `GET` | `/reservations/me` | Bearer token | List my reservations |
+| `POST` | `/reservations/:id/cancel` | Bearer token | Cancel one of my reservations |
+
+New accounts are always regular users. For now I make someone an admin by changing the `role` column in the database.
 
 ## Security checklist
 
 Basic things I want to get right. I'll tick them only when they are really done.
 
 - [x] Hash passwords with argon2
-- [ ] Validate all incoming data
+- [x] Validate all incoming data
 - [ ] Rate limit the login endpoint
-- [ ] Users can only access their own reservations
+- [x] Users can only access their own reservations
 - [x] Keep secrets in environment variables, never in the code
 - [ ] Set up CORS and security headers properly
 
@@ -181,17 +255,19 @@ Basic things I want to get right. I'll tick them only when they are really done.
 - [x] Docker Compose with PostgreSQL
 - [x] Database migrations
 - [x] Authentication and roles
-- [ ] Events and seats
-- [ ] Reservations without double booking
-- [ ] Concurrent reservation test
+- [x] Events and seats
+- [x] Reservations without double booking
+- [x] Concurrent reservation test
+- [ ] Unit tests
 
 **Phase 2: shipping it**
 
-- [ ] React frontend (login, event list, seat selection, my reservations)
 - [ ] Swagger / OpenAPI docs
+- [ ] Health check endpoint
 - [ ] GitHub Actions
 - [ ] Docker production image
 - [ ] AWS deployment, HTTPS and health checks
+- [ ] React frontend (login, event list, seat selection, my reservations)
 
 **Phase 3: extras**
 
