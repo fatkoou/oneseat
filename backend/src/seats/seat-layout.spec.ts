@@ -81,7 +81,7 @@ describe('expandLayout', () => {
 
     expect(() => expandLayout(EVENT_ID, layout)).toThrow(BadRequestException);
   });
-   
+
   it('rejects the same row label twice in one section', () => {
     const layout = layoutWithRows(
       { label: 'A', seatCount: 2 },
@@ -101,5 +101,4 @@ describe('expandLayout', () => {
 
     expect(expandLayout(EVENT_ID, layout)).toHaveLength(2);
   });
-
 });

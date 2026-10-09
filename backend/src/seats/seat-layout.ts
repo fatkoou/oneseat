@@ -65,4 +65,3 @@ function assertNoDuplicateRows(layout: GenerateSeatsDto): void {
     }
   }
 }
-
