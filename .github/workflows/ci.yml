@@ -56,6 +56,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
       - name: Build
         run: npm run build
 
@@ -67,3 +70,6 @@ jobs:
 
       - name: E2E tests
         run: npm run test:e2e
+
+      - name: Check production dependencies for known vulnerabilities
+        run: npm audit --omit=dev --audit-level=high
