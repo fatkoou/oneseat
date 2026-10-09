@@ -16,12 +16,12 @@ A basic "check if the seat is free, then book it" flow doesn't work here. Both r
 - Admins create events and generate seats from a layout (sections, rows, seat counts) instead of adding them one by one
 - Users reserve a seat, list their reservations and cancel them
 - A seat can have only one confirmed reservation, enforced by PostgreSQL
+- API documentation with Swagger
 
 **Planned**
 
 - Seats held for a short time while someone is reserving
 - Confirmation emails in the background
-- API documentation with Swagger
 - A React frontend
 
 ## Tech stack
@@ -33,13 +33,13 @@ A basic "check if the seat is free, then book it" flow doesn't work here. Both r
 - **Auth and validation:** JWT (`@nestjs/jwt`), argon2, class-validator
 - **Testing:** Jest, Supertest
 - **Containers:** Docker, Docker Compose
+- **API docs:** Swagger / OpenAPI
 
 **Planned**
 
 - **Cache / temporary data:** Redis
 - **Background jobs:** BullMQ
 - **Frontend:** React, TypeScript
-- **API docs:** Swagger / OpenAPI
 - **CI:** GitHub Actions
 - **Cloud:** AWS
 - **Infrastructure:** Terraform
@@ -220,6 +220,8 @@ Copy `.env.example` to `.env` in the repo root. The real `.env` is never committ
 
 ## API
 
+Interactive docs are available at http://localhost:3000/docs when the app is running.
+
 | Method | Route | Auth | Description |
 | --- | --- | --- | --- |
 | `POST` | `/auth/register` | none | Create an account |
@@ -262,7 +264,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 
 **Phase 2: shipping it**
 
-- [ ] Swagger / OpenAPI docs
+- [x] Swagger / OpenAPI docs
 - [ ] Health check endpoint
 - [ ] GitHub Actions
 - [ ] Docker production image
