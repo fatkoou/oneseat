@@ -17,6 +17,8 @@ export function expandLayout(
     );
   }
 
+  assertNoDuplicateRows(layout);
+
   const seats: NewSeat[] = [];
 
   for (const section of layout.sections) {
@@ -45,3 +47,22 @@ function countSeats(layout: GenerateSeatsDto): number {
     0,
   );
 }
+
+function assertNoDuplicateRows(layout: GenerateSeatsDto): void {
+  const seen = new Set<string>();
+
+  for (const section of layout.sections) {
+    for (const row of section.rows) {
+      const key = JSON.stringify([section.name, row.label]);
+
+      if (seen.has(key)) {
+        throw new BadRequestException(
+          `Row "${row.label}" appears more than once in section "${section.name}"`,
+        );
+      }
+
+      seen.add(key);
+    }
+  }
+}
+
