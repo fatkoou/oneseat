@@ -145,7 +145,7 @@ To make sure the test really tests something, I dropped the partial unique index
 
 One honest note: the requests are sent together, but the connection pool limits how many of them reach PostgreSQL at the same moment. So this tests concurrent requests, not 50 simultaneous writes.
 
-I don't have unit tests yet.
+I also have unit tests for the seat layout logic and for the error handling in the users and reservations services. They use a mocked repository, run in milliseconds and don't need a database. They check my own logic. The guarantee against double booking is checked by the concurrency test, because only a real database can prove it.
 
 ## Project structure
 
@@ -258,7 +258,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 - [x] Events and seats
 - [x] Reservations without double booking
 - [x] Concurrent reservation test
-- [ ] Unit tests
+- [x] Unit tests
 
 **Phase 2: shipping it**
 
