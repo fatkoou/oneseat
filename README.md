@@ -1,4 +1,6 @@
 # OneSeat
+![CI](https://github.com/fatkoou/oneseat/actions/workflows/ci.yml/badge.svg)
+
 
 OneSeat is an event seat reservation backend. The name is the one rule the whole project is built around: one seat, one person.
 
