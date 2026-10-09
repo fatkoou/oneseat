@@ -157,6 +157,7 @@ backend/
 │   ├── config/          # environment helpers
 │   ├── database/        # database config
 │   ├── events/          # events
+│   ├── health/          # health check
 │   ├── migrations/      # TypeORM migrations
 │   ├── reservations/    # reserve, list and cancel
 │   ├── seats/           # seat layout generation
@@ -187,7 +188,7 @@ npm run start:dev
 
 Set your own database password and a long random `JWT_SECRET` in `.env` before starting.
 
-Then open `http://localhost:3000`. The root route still returns the "Hello World!" from the NestJS template. The real endpoints are listed in the API section below.
+Then open `http://localhost:3000`. Then open http://localhost:3000/health/ready to check that the app can reach the database, or http://localhost:3000/docs for the API documentation.
 
 Local ports:
 
@@ -235,6 +236,9 @@ Interactive docs are available at http://localhost:3000/docs when the app is run
 | `POST` | `/reservations` | Bearer token | Reserve a seat |
 | `GET` | `/reservations/me` | Bearer token | List my reservations |
 | `POST` | `/reservations/:id/cancel` | Bearer token | Cancel one of my reservations |
+| `GET` | `/health/live` | none | Liveness check |
+| `GET` | `/health/ready` | none | Readiness check (checks the database) |
+
 
 New accounts are always regular users. For now I make someone an admin by changing the `role` column in the database.
 
@@ -265,7 +269,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 **Phase 2: shipping it**
 
 - [x] Swagger / OpenAPI docs
-- [ ] Health check endpoint
+- [x] Health check endpoint
 - [ ] GitHub Actions
 - [ ] Docker production image
 - [ ] AWS deployment, HTTPS and health checks
