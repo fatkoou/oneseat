@@ -36,13 +36,13 @@ A basic "check if the seat is free, then book it" flow doesn't work here. Both r
 - **Testing:** Jest, Supertest
 - **Containers:** Docker, Docker Compose
 - **API docs:** Swagger / OpenAPI
+- **CI:** GitHub Actions
 
 **Planned**
 
 - **Cache / temporary data:** Redis
 - **Background jobs:** BullMQ
 - **Frontend:** React, TypeScript
-- **CI:** GitHub Actions
 - **Cloud:** AWS
 - **Infrastructure:** Terraform
 
@@ -207,6 +207,7 @@ cd backend
 npm run migration:run:test
 npm run test:e2e
 ```
+The same steps run on every push with GitHub Actions.
 
 ## Environment variables
 
@@ -272,7 +273,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 
 - [x] Swagger / OpenAPI docs
 - [x] Health check endpoint
-- [ ] GitHub Actions
+- [x] GitHub Actions
 - [ ] Docker production image
 - [ ] AWS deployment, HTTPS and health checks
 - [ ] React frontend (login, event list, seat selection, my reservations)
