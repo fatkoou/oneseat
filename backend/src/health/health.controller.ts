@@ -28,7 +28,9 @@ export class HealthController {
   }
 
   @ApiOperation({ summary: 'Readiness: can the app reach its database?' })
-  @ApiServiceUnavailableResponse({ description: 'The database is not reachable' })
+  @ApiServiceUnavailableResponse({
+    description: 'The database is not reachable',
+  })
   @HealthCheck()
   @Get('ready')
   ready() {
