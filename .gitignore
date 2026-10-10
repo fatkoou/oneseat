@@ -2,3 +2,12 @@ node_modules/
 dist/
 .env
 .DS_Store
+
+# Test coverage
+backend/coverage/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Local database backups
+backup.sql
