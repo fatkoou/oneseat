@@ -73,3 +73,13 @@ jobs:
 
       - name: Check production dependencies for known vulnerabilities
         run: npm audit --omit=dev --audit-level=high
+    
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build the Docker image
+        run: docker build ./backend
+
