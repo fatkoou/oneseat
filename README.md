@@ -168,14 +168,15 @@ backend/
 │   ├── app.setup.ts     # shared app config (validation)
 │   ├── data-source.ts   # data source for the TypeORM CLI
 │   └── main.ts
-└── test/                # e2e tests
+├── test/                # e2e tests
+└── Dockerfile/                 
 ```
 
 Planned module: `notifications`. The structure will probably change as the project grows.
 
 ## Running it locally
 
-You need Docker, Docker Compose and Node.js (I'm using Node 24). For now only PostgreSQL runs in Docker, and the API runs directly on your machine.
+You need Docker, Docker Compose and Node.js (I'm using Node 24). Now both PostgreSQL and the API can run in Docker.
 
 ```bash
 git clone https://github.com/fatkoou/oneseat.git
@@ -218,7 +219,7 @@ Copy `.env.example` to `.env` in the repo root. The real `.env` is never committ
 | `POSTGRES_USER` | Database user |
 | `POSTGRES_PASSWORD` | Database password |
 | `POSTGRES_DB` | Database name |
-| `DB_HOST` | Database host (`localhost` when running locally) |
+| `DB_HOST` | Database host (`localhost` when the API runs on your machine. In Docker Compose it is set to `db`) |
 | `DB_PORT` | Database port (`5432`) |
 | `JWT_SECRET` | Secret used to sign tokens. Generate one with `openssl rand -base64 48` |
 
@@ -275,7 +276,7 @@ Basic things I want to get right. I'll tick them only when they are really done.
 - [x] Swagger / OpenAPI docs
 - [x] Health check endpoint
 - [x] GitHub Actions
-- [ ] Docker production image
+- [x] Docker production image
 - [ ] AWS deployment, HTTPS and health checks
 - [ ] React frontend (login, event list, seat selection, my reservations)
 
