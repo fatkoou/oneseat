@@ -1,0 +1,17 @@
+.seat-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px; /* minmax(0, …) lets the map scroll instead of stretching the grid */
+  gap: 24px;
+  align-items: start; /* needed for the sticky panel */
+}
+
+.seat-picker__skeleton {
+  height: 420px;
+  border-radius: var(--radius-xl);
+}
+
+@media (max-width: 899px) {
+  .seat-picker {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,14 @@
+.discover-skeleton__hero {
+  height: 360px;
+  margin-top: 32px;
+  border-radius: var(--radius-xl);
+}
+
+.discover-skeleton__grid {
+  margin-top: 56px;
+}
+
+.discover-skeleton__card {
+  height: 320px;
+  border-radius: var(--radius-lg);
+}

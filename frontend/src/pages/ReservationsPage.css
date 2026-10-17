@@ -1,0 +1,9 @@
+.reservations-page__notice {
+    margin-top: 24px;
+}
+
+.reservations-page__skeleton {
+    height: 200px;
+    margin-top: 40px;
+    border-radius: var(--radius-lg);
+}

@@ -1,0 +1,29 @@
+.admin-page__notice {
+  margin-top: 24px;
+}
+
+.admin-page__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  margin-top: 32px;
+}
+
+.admin-page__heading {
+  margin-bottom: 16px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.admin-page__skeleton {
+  height: 240px;
+  border-radius: var(--radius-xl);
+}
+
+@media (max-width: 899px) {
+  .admin-page__layout {
+    grid-template-columns: 1fr;
+  }
+}

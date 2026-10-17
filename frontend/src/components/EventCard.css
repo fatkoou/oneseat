@@ -1,0 +1,45 @@
+.event-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.event-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 16px 40px rgba(0, 0, 0, 0.1);
+}
+
+.event-card__body {
+  padding: 16px 20px 20px;
+}
+
+.event-card__date {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.event-card__title {
+  margin-top: 4px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.event-card__place {
+  margin-top: 2px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+/* past events are shown, but quieter */
+.event-card--past {
+  opacity: 0.6;
+}
+
+.event-card--past .event-card__date {
+  color: var(--text-secondary);
+}

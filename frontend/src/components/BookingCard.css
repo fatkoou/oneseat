@@ -1,0 +1,56 @@
+.booking-card {
+  padding: 24px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.booking-card--past {
+  opacity: 0.6;
+}
+
+.booking-card__date {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.booking-card--past .booking-card__date {
+  color: var(--text-secondary);
+}
+
+.booking-card__title {
+  margin-top: 2px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.booking-card__title a {
+  color: inherit;
+}
+
+.booking-card__title a:hover {
+  color: var(--accent);
+}
+
+.booking-card__seats {
+  margin-top: 16px;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.booking-card__seat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  border-bottom: 1px solid var(--line);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.booking-card__seat:last-child {
+  border-bottom: 0;
+}

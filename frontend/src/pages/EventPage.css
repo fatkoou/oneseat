@@ -1,0 +1,11 @@
+.event-page__back {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.event-page__skeleton {
+  height: 360px;
+  margin-top: 24px;
+  border-radius: var(--radius-xl);
+}

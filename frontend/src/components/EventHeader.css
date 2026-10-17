@@ -1,0 +1,22 @@
+.event-header {
+  margin: 24px 0 32px;
+}
+
+.event-header__when {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.event-header__place {
+  margin-top: 4px;
+  font-size: 19px;
+  color: var(--text-secondary);
+}
+
+.event-header__description {
+  max-width: 640px;
+  margin-top: 16px;
+  font-size: 17px;
+  line-height: 1.5;
+}

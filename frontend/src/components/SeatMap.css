@@ -1,0 +1,54 @@
+.seat-map {
+  --seat-size: 34px;
+  --seat-gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 32px 24px;
+  overflow-x: auto; /* very wide rows scroll instead of breaking the page */
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+/* auto margins center the section, and let long rows scroll from the left edge */
+.seat-section {
+  width: max-content;
+  margin-inline: auto;
+}
+
+.seat-section__name {
+  margin-bottom: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: var(--seat-gap);
+}
+
+.seat-row__label {
+  width: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-tertiary);
+}
+
+.seat-row__seats {
+  display: flex;
+  gap: var(--seat-gap);
+}
+
+@media (max-width: 767px) {
+  .seat-map {
+    --seat-size: 26px;
+    --seat-gap: 4px;
+    padding: 24px 16px;
+  }
+}

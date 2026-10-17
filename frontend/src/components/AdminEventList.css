@@ -1,0 +1,30 @@
+.admin-events {
+  overflow: hidden;
+  list-style: none;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.admin-events__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-events__item:last-child {
+  border-bottom: 0;
+}
+
+.admin-events__title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.admin-events__meta {
+  font-size: 14px;
+  color: var(--text-secondary);
+}

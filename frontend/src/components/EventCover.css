@@ -1,0 +1,50 @@
+.cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* soft light in the top corner */
+.cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 0%, rgba(255, 255, 255, 0.3), transparent 55%);
+}
+
+.cover--card {
+  aspect-ratio: 4 / 3;
+}
+
+.cover--hero {
+  min-height: 320px;
+  padding: 32px;
+}
+
+.cover__day,
+.cover__month {
+  position: relative;
+  z-index: 1;
+}
+
+.cover__day {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+.cover__month {
+  font-size: 20px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.cover--hero .cover__day {
+  font-size: 120px;
+}

@@ -1,0 +1,16 @@
+.event-section {
+  margin-top: 56px;
+}
+
+.event-section__title {
+  margin-bottom: 20px;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}

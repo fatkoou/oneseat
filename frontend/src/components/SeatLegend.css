@@ -1,0 +1,34 @@
+.seat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 16px;
+  list-style: none;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.seat-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seat-legend__swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.seat-legend__swatch--available {
+  background: var(--surface-muted);
+}
+
+.seat-legend__swatch--selected {
+  background: var(--accent);
+}
+
+.seat-legend__swatch--reserved {
+  opacity: 0.55;
+}

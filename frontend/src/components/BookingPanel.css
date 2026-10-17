@@ -1,0 +1,52 @@
+.booking-panel {
+  position: sticky;
+  top: calc(var(--header-height) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-overlay);
+}
+
+.booking-panel__title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.booking-panel__hint {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.booking-panel__seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+}
+
+.seat-chip {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.seat-chip:hover {
+  background: #d8e8fb;
+}
+
+/* on small screens the panel sticks to the bottom, so the button is always reachable */
+@media (max-width: 899px) {
+  .booking-panel {
+    top: auto;
+    bottom: 16px;
+    padding: 20px;
+  }
+}

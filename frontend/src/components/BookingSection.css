@@ -1,0 +1,15 @@
+.booking-section {
+  margin-top: 40px;
+}
+
+.booking-section__title {
+  margin-bottom: 16px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.booking-section__list {
+  display: grid;
+  gap: 16px;
+}
