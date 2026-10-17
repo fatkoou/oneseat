@@ -1,0 +1,40 @@
+.seat-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.seat-layout__title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.seat-layout__hint {
+  margin-top: -16px;
+  color: var(--text-secondary);
+}
+
+.seat-layout__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.seat-layout__summary {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.seat-layout__summary--error {
+  color: var(--danger);
+}
+
+.seat-layout__add,
+.seat-layout__submit {
+  align-self: flex-start;
+}

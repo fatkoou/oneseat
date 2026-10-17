@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { getEvents } from '../api/events';
 import type { EventItem } from '../api/types';
 import { AdminEventList } from '../components/AdminEventList';
@@ -10,10 +11,10 @@ import './AdminPage.css';
 
 export function AdminPage() {
   const { data: events, error, reload } = useAsync(getEvents);
-  const [createdTitle, setCreatedTitle] = useState<string | null>(null);
+  const [createdEvent, setCreatedEvent] = useState<EventItem | null>(null);
 
   function handleCreated(event: EventItem) {
-    setCreatedTitle(event.title);
+    setCreatedEvent(event);
     reload();
   }
 
@@ -22,9 +23,11 @@ export function AdminPage() {
       <h1 className="page-title">Admin</h1>
       <p className="page-subtitle">Create events and manage their seats.</p>
 
-      {createdTitle && (
+      {createdEvent && (
         <div className="admin-page__notice">
-          <Notice kind="success">Created “{createdTitle}”.</Notice>
+          <Notice kind="success">
+            Created “{createdEvent.title}”. <Link to={`/admin/events/${createdEvent.id}/seats`}>Add seats</Link>
+          </Notice>
         </div>
       )}
 

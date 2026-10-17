@@ -1,0 +1,36 @@
+.admin-seats__back {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.admin-seats__skeleton {
+  height: 360px;
+  margin-top: 24px;
+  border-radius: var(--radius-xl);
+}
+
+.admin-seats__layout {
+  display: grid;
+  gap: 24px;
+  max-width: 880px;
+}
+
+.admin-seats__current {
+  padding: 24px 32px;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.admin-seats__label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.admin-seats__count {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 700;
+}

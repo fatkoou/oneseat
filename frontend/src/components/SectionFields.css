@@ -1,0 +1,29 @@
+.section-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* lines the button up with the inputs, below their labels */
+.section-fields__remove {
+  margin-top: 34px;
+}
+
+@media (max-width: 767px) {
+  .section-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .section-fields > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .section-fields__remove {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 0;
+  }
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import { EMPTY_EVENT_FORM, hasErrors, toCreateEventInput, validateEventForm } from '../admin/eventForm';
+import { EMPTY_EVENT_FORM, toCreateEventInput, validateEventForm } from '../admin/eventForm';
+import { hasErrors } from '../admin/validation';
 import type { EventFormErrors, EventFormValues } from '../admin/eventForm';
 import { getErrorMessage } from '../api/client';
 import { createEvent } from '../api/events';

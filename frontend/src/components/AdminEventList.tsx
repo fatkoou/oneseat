@@ -14,9 +14,14 @@ export function AdminEventList({ events }: { events: EventItem[] }) {
               {formatShortDate(event.startsAt)}, {formatTime(event.startsAt)} · {event.location}
             </p>
           </div>
-          <Link to={`/events/${event.id}`} className="btn btn--secondary btn--sm">
-            View
-          </Link>
+          <div className="admin-events__actions">
+            <Link to={`/admin/events/${event.id}/seats`} className="btn btn--secondary btn--sm">
+              Seats
+            </Link>
+            <Link to={`/events/${event.id}`} className="btn btn--ghost btn--sm">
+              View
+            </Link>
+          </div>
         </li>
       ))}
     </ul>

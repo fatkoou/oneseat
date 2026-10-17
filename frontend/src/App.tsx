@@ -7,6 +7,7 @@ import { ReservationsPage } from './pages/ReservationsPage';
 import { EventPage } from './pages/EventPage';
 import { RequireAdmin } from './auth/RequireAdmin';
 import { AdminPage } from './pages/AdminPage';
+import { AdminSeatsPage } from './pages/AdminSeatsPage';
 
 export function App() {
   return (
@@ -23,6 +24,7 @@ export function App() {
             <Route path="/reservations" element={<ReservationsPage />} />
             <Route element={<RequireAdmin />}>
               <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin/events/:eventId/seats" element={<AdminSeatsPage />} />
             </Route>
           </Route>
         </Routes>

@@ -28,3 +28,9 @@
   font-size: 14px;
   color: var(--text-secondary);
 }
+
+.admin-events__actions {
+  display: flex;
+  gap: 8px;
+}
+

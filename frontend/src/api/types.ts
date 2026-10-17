@@ -41,6 +41,14 @@ export interface CreateEventInput {
   startsAt: string;
 }
 
+export interface SeatLayoutRequest {
+  sections: {
+    name: string;
+    rows: { label: string; seatCount: number }[];
+  }[];
+}
+
+
 
 
 

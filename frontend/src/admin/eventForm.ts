@@ -23,9 +23,6 @@ export const EMPTY_EVENT_FORM: EventFormValues = {
   time: '',
 };
 
-export function hasErrors(errors: Record<string, string | undefined>): boolean {
-  return Object.values(errors).some((message) => message !== undefined);
-}
 
 function validateRequiredText(value: string, label: string, maxLength: number): string | undefined {
   const length = value.trim().length;
